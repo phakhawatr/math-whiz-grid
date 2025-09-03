@@ -10,11 +10,11 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 const TimesTableQuiz = () => {
   // ค่าคงที่
   const TABLE_SIZE = 13;
-  const HOLE_OPTIONS = [20, 30, 40];
+  const HOLE_OPTIONS = [40, 50, 60, 70, 80];
   
   // State หลัก
   const [size] = useState(TABLE_SIZE);
-  const [holeCount, setHoleCount] = useState(20);
+  const [holeCount, setHoleCount] = useState(40);
   const [holes, setHoles] = useState(new Set());
   const [answers, setAnswers] = useState({});
   const [startedAt, setStartedAt] = useState(null);
@@ -332,24 +332,29 @@ const TimesTableQuiz = () => {
     const value = row * col;
     const isPerfectSquareCell = isPerfectSquare(row, col);
     
+    // สีพื้นหลังตามแถว (แม่สูตรคูณ)
+    const getRowColorClass = (row) => {
+      return `bg-table-row-${row}`;
+    };
+    
     if (isHole) {
-      // ช่องที่ให้กรอกคำตอบ
+      // ช่องที่ให้กรอกคำตอบ - ใช้สีแดงอ่อน
       const userAnswer = answers[holeId] || '';
       const correctAnswer = value;
       const isCorrect = parseInt(userAnswer) === correctAnswer;
       
-      let inputClass = 'w-full h-12 text-center text-lg font-bold bg-table-hole border-2 border-border rounded-lg transition-all duration-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none';
+      let inputClass = 'w-full h-12 text-center text-xl font-bold bg-table-hole text-black border-2 border-red-300 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none shadow-inner';
       
       if (checked) {
         inputClass += isCorrect 
-          ? ' border-success bg-success/10 text-success-foreground' 
-          : ' border-error bg-error/10 text-error-foreground';
+          ? ' border-success bg-success/20 text-success-foreground shadow-lg' 
+          : ' border-error bg-error/20 text-error-foreground shadow-lg';
       }
       
       return (
         <td 
           key={`${row}-${col}`}
-          className="p-1 border border-border bg-table-hole"
+          className={`p-1 border border-gray-300 ${getRowColorClass(row)} w-16 h-12`}
         >
           <input
             ref={el => inputRefs.current[holeId] = el}
@@ -372,15 +377,13 @@ const TimesTableQuiz = () => {
     
     // ช่องที่แสดงคำตอบ
     const cellClass = isPerfectSquareCell 
-      ? 'text-perfect-square font-bold' 
-      : 'text-foreground';
+      ? 'text-perfect-square font-bold text-xl' 
+      : 'text-foreground text-lg font-semibold';
       
     return (
       <td 
         key={`${row}-${col}`}
-        className={`p-2 h-12 border border-border text-center text-lg font-semibold ${
-          (row + col) % 2 === 0 ? 'bg-table-cell' : 'bg-table-cell-alt'
-        }`}
+        className={`p-2 w-16 h-12 border border-gray-300 text-center ${getRowColorClass(row)}`}
       >
         <span className={cellClass}>{value}</span>
       </td>
@@ -409,19 +412,19 @@ const TimesTableQuiz = () => {
         
         {/* Controls */}
         <div className="bg-card rounded-2xl shadow-lg p-6 mb-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-6">
             {/* จำนวนช่อง */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <span className="text-lg font-semibold text-card-foreground">จำนวนช่อง ?:</span>
-              <div className="flex gap-1 bg-background rounded-lg p-1">
+              <div className="flex gap-2 bg-background rounded-xl p-2 shadow-inner">
                 {HOLE_OPTIONS.map(count => (
                   <button
                     key={count}
                     onClick={() => setHoleCount(count)}
-                    className={`px-4 py-2 rounded-md font-semibold transition-all ${
+                    className={`px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 ${
                       holeCount === count
-                        ? 'bg-primary text-primary-foreground shadow-md'
-                        : 'text-foreground hover:bg-primary/10'
+                        ? 'bg-primary text-primary-foreground shadow-lg transform scale-105'
+                        : 'text-foreground hover:bg-primary/10 hover:scale-105 shadow-sm'
                     }`}
                   >
                     {count}
@@ -431,9 +434,9 @@ const TimesTableQuiz = () => {
             </div>
             
             {/* Timer */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <span className="text-lg font-semibold text-card-foreground">เวลา:</span>
-              <div className="bg-background px-4 py-2 rounded-lg">
+              <div className="bg-gradient-to-r from-primary/10 to-secondary/10 px-5 py-2.5 rounded-xl shadow-inner border border-primary/20">
                 <span className="text-xl font-mono font-bold text-primary">
                   {formatTime(elapsedMs)}
                 </span>
@@ -441,41 +444,41 @@ const TimesTableQuiz = () => {
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
+          <div className="flex flex-wrap items-center justify-between gap-6 mt-6">
             {/* Action Buttons */}
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <button
                 onClick={handleNewSet}
-                className="px-6 py-2 bg-secondary text-secondary-foreground font-semibold rounded-lg hover:bg-secondary/90 transition-colors"
+                className="px-8 py-3 bg-gradient-to-r from-secondary to-secondary/90 text-secondary-foreground font-semibold rounded-xl hover:from-secondary/90 hover:to-secondary hover:scale-105 transition-all duration-200 shadow-lg"
               >
-                สุ่มชุดใหม่
+                🎲 สุ่มชุดใหม่
               </button>
               
               <button
                 onClick={handleCheck}
                 disabled={!startedAt || checked}
-                className="px-6 py-2 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-8 py-3 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground font-semibold rounded-xl hover:from-primary/90 hover:to-primary hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 shadow-lg"
               >
-                ตรวจคำตอบ
+                ✅ ตรวจคำตอบ
               </button>
               
               <button
                 onClick={handleShowAnswers}
-                className="px-6 py-2 bg-card-foreground text-card font-semibold rounded-lg hover:bg-card-foreground/90 transition-colors"
+                className="px-8 py-3 bg-gradient-to-r from-card-foreground/80 to-card-foreground text-card font-semibold rounded-xl hover:from-card-foreground hover:to-card-foreground/90 hover:scale-105 transition-all duration-200 shadow-lg"
               >
-                เฉลยทั้งหมด
+                💡 เฉลยทั้งหมด
               </button>
             </div>
             
             {/* Symmetric Option */}
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-3 cursor-pointer bg-background/50 px-4 py-2 rounded-xl">
               <input
                 type="checkbox"
                 checked={dedupeSymmetric}
                 onChange={(e) => setDedupeSymmetric(e.target.checked)}
-                className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary"
+                className="w-5 h-5 text-primary bg-background border-2 border-primary/20 rounded-md focus:ring-2 focus:ring-primary/50"
               />
-              <span className="text-sm text-card-foreground">
+              <span className="text-sm font-medium text-card-foreground">
                 ซ่อนค่าซ้ำแบบกลับด้าน (a×b = b×a)
               </span>
             </label>
@@ -488,15 +491,15 @@ const TimesTableQuiz = () => {
             <table className="w-full min-w-[800px]">
               <thead>
                 <tr className="bg-table-header">
-                  <th className="sticky left-0 top-0 z-20 w-12 h-12 bg-table-header border border-border">
-                    <span className="text-lg font-bold text-foreground">×</span>
+                  <th className="sticky left-0 top-0 z-20 w-16 h-12 bg-table-header border border-gray-300 shadow-md">
+                    <span className="text-xl font-bold text-foreground">×</span>
                   </th>
                   {Array.from({length: size}, (_, i) => i + 1).map(col => (
                     <th 
                       key={col}
-                      className="sticky top-0 z-10 w-16 h-12 bg-table-header border border-border"
+                      className="sticky top-0 z-10 w-16 h-12 bg-table-header border border-gray-300 shadow-md"
                     >
-                      <span className="text-lg font-bold text-foreground">{col}</span>
+                      <span className="text-xl font-bold text-foreground">{col}</span>
                     </th>
                   ))}
                 </tr>
@@ -504,8 +507,8 @@ const TimesTableQuiz = () => {
               <tbody>
                 {Array.from({length: size}, (_, i) => i + 1).map(row => (
                   <tr key={row}>
-                    <th className="sticky left-0 z-10 w-12 h-12 bg-table-header-alt border border-border">
-                      <span className="text-lg font-bold text-foreground">{row}</span>
+                    <th className="sticky left-0 z-10 w-16 h-12 bg-table-header-alt border border-gray-300 shadow-md">
+                      <span className="text-xl font-bold text-foreground">{row}</span>
                     </th>
                     {Array.from({length: size}, (_, i) => i + 1).map(col => 
                       renderCell(row, col)

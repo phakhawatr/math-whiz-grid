@@ -43,7 +43,22 @@
     --table-header-alt: 45 100% 85%; /* Yellow gradient for headers */
     --table-cell: 210 40% 98%;     /* Light background for cells */
     --table-cell-alt: 45 100% 96%; /* Alternating cell color */
-    --table-hole: 220 13% 95%;     /* Slightly darker for input cells */
+    --table-hole: 0 100% 95%;      /* Light red for question boxes */
+    
+    /* Colorful row backgrounds for different multiplication tables */
+    --table-row-1: 45 100% 90%;    /* Light yellow */
+    --table-row-2: 120 100% 90%;   /* Light green */
+    --table-row-3: 210 100% 90%;   /* Light blue */
+    --table-row-4: 280 100% 90%;   /* Light purple */
+    --table-row-5: 340 100% 90%;   /* Light pink */
+    --table-row-6: 20 100% 90%;    /* Light orange */
+    --table-row-7: 180 100% 90%;   /* Light cyan */
+    --table-row-8: 60 100% 90%;    /* Light lime */
+    --table-row-9: 300 100% 90%;   /* Light magenta */
+    --table-row-10: 160 100% 90%;  /* Light teal */
+    --table-row-11: 240 100% 90%;  /* Light indigo */
+    --table-row-12: 80 100% 90%;   /* Light yellow-green */
+    --table-row-13: 200 100% 90%;  /* Light sky blue */
     
     /* Interactive states */
     --hover: 30 100% 55%;
