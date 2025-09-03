@@ -132,7 +132,8 @@ const TimesTableQuiz = () => {
     setChecked(true);
     setShowAnswers(false); // Reset show answers state
     
-    setTimeout(() => setShowModal(true), 500);
+    // แสดง modal หลังจากแสดงผลลัพธ์แล้ว
+    setTimeout(() => setShowModal(true), 1000);
   };
   
   /**
@@ -345,11 +346,11 @@ const TimesTableQuiz = () => {
       if (checked && !showAnswers) {
         // ตรวจคำตอบ - เขียวถูก แดงผิด
         inputClass += isCorrect 
-          ? ' !border-green-500 !bg-green-100 !text-green-800 shadow-lg' 
-          : ' !border-red-500 !bg-red-100 !text-red-800 shadow-lg';
+          ? ' answer-correct' 
+          : ' answer-incorrect';
       } else if (showAnswers) {
         // เฉลยทั้งหมด - แสดงสีแดงทั้งหมด
-        inputClass += ' !border-red-500 !bg-red-100 !text-red-800 shadow-lg';
+        inputClass += ' answer-revealed';
       }
       
       return (

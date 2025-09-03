@@ -134,6 +134,30 @@
   color: hsl(210 100% 50%) !important;
 }
 
+/* Enhanced feedback styles for check answers */
+.answer-correct {
+  background-color: hsl(120 60% 85%) !important;
+  border-color: hsl(120 60% 50%) !important;
+  color: hsl(120 60% 20%) !important;
+  box-shadow: 0 0 0 2px hsl(120 60% 80%), 0 4px 8px -2px hsl(120 60% 50% / 0.3) !important;
+  transform: scale(1.02);
+}
+
+.answer-incorrect {
+  background-color: hsl(0 60% 85%) !important;
+  border-color: hsl(0 60% 50%) !important;
+  color: hsl(0 60% 20%) !important;
+  box-shadow: 0 0 0 2px hsl(0 60% 80%), 0 4px 8px -2px hsl(0 60% 50% / 0.3) !important;
+  transform: scale(1.02);
+}
+
+.answer-revealed {
+  background-color: hsl(0 60% 85%) !important;
+  border-color: hsl(0 60% 50%) !important;
+  color: hsl(0 60% 20%) !important;
+  box-shadow: 0 0 0 2px hsl(0 60% 80%), 0 4px 8px -2px hsl(0 60% 50% / 0.3) !important;
+}
+
 /* Material Design utility classes */
 .hover\:scale-102:hover {
   transform: scale(1.02);
