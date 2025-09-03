@@ -324,6 +324,13 @@ const TimesTableQuiz = () => {
   };
   
   /**
+   * ฟังก์ชันรับสีคอลัมน์ตามหมายเลข
+   */
+  const getColumnColor = (col) => {
+    return `bg-col-${col}`;
+  };
+  
+  /**
    * สร้าง cell ในตาราง
    */
   const renderCell = (row, col) => {
@@ -331,6 +338,10 @@ const TimesTableQuiz = () => {
     const isHole = holes.has(holeId);
     const value = row * col;
     const isPerfectSquareCell = isPerfectSquare(row, col);
+    const columnBg = getColumnColor(col);
+    
+    // Base cell class with consistent sizing
+    const baseCellClass = "p-1 border border-border w-16 h-16 min-w-[64px] min-h-[64px]";
     
     if (isHole) {
       // ช่องที่ให้กรอกคำตอบ
@@ -338,7 +349,7 @@ const TimesTableQuiz = () => {
       const correctAnswer = value;
       const isCorrect = parseInt(userAnswer) === correctAnswer;
       
-      let inputClass = 'w-full h-12 text-center text-lg font-bold bg-table-hole border-2 border-border rounded-lg transition-all duration-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none';
+      let inputClass = 'w-full h-full text-center text-lg font-bold bg-white/80 border-2 border-border rounded-lg transition-all duration-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none';
       
       if (checked) {
         inputClass += isCorrect 
@@ -349,7 +360,7 @@ const TimesTableQuiz = () => {
       return (
         <td 
           key={`${row}-${col}`}
-          className="p-1 border border-border bg-table-hole"
+          className={`${baseCellClass} ${columnBg}`}
         >
           <input
             ref={el => inputRefs.current[holeId] = el}
@@ -372,15 +383,13 @@ const TimesTableQuiz = () => {
     
     // ช่องที่แสดงคำตอบ
     const cellClass = isPerfectSquareCell 
-      ? 'text-perfect-square font-bold' 
-      : 'text-foreground';
+      ? 'text-perfect-square font-bold text-xl' 
+      : 'text-foreground font-semibold text-lg';
       
     return (
       <td 
         key={`${row}-${col}`}
-        className={`p-2 h-12 border border-border text-center text-lg font-semibold ${
-          (row + col) % 2 === 0 ? 'bg-table-cell' : 'bg-table-cell-alt'
-        }`}
+        className={`${baseCellClass} ${columnBg} flex items-center justify-center`}
       >
         <span className={cellClass}>{value}</span>
       </td>
@@ -399,11 +408,11 @@ const TimesTableQuiz = () => {
       {/* Header */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            ตารางสูตรคูณ 1–13
+          <h1 className="text-5xl font-bold text-foreground mb-2 font-mali">
+            🎯 ตารางสูตรคูณ 1–13 🎯
           </h1>
-          <p className="text-lg text-foreground/70">
-            ฝึกสูตรคูณสำหรับเด็กแบบสนุก ๆ
+          <p className="text-xl text-foreground/70 font-prompt">
+            ฝึกสูตรคูณสำหรับเด็กแบบสนุก ๆ 📚✨
           </p>
         </div>
         
@@ -488,13 +497,13 @@ const TimesTableQuiz = () => {
             <table className="w-full min-w-[800px]">
               <thead>
                 <tr className="bg-table-header">
-                  <th className="sticky left-0 top-0 z-20 w-12 h-12 bg-table-header border border-border">
+                  <th className="sticky left-0 top-0 z-20 w-16 h-16 min-w-[64px] min-h-[64px] bg-table-header border border-border">
                     <span className="text-lg font-bold text-foreground">×</span>
                   </th>
                   {Array.from({length: size}, (_, i) => i + 1).map(col => (
                     <th 
                       key={col}
-                      className="sticky top-0 z-10 w-16 h-12 bg-table-header border border-border"
+                      className="sticky top-0 z-10 w-16 h-16 min-w-[64px] min-h-[64px] bg-table-header border border-border"
                     >
                       <span className="text-lg font-bold text-foreground">{col}</span>
                     </th>
@@ -504,7 +513,7 @@ const TimesTableQuiz = () => {
               <tbody>
                 {Array.from({length: size}, (_, i) => i + 1).map(row => (
                   <tr key={row}>
-                    <th className="sticky left-0 z-10 w-12 h-12 bg-table-header-alt border border-border">
+                    <th className="sticky left-0 z-10 w-16 h-16 min-w-[64px] min-h-[64px] bg-table-header-alt border border-border flex items-center justify-center">
                       <span className="text-lg font-bold text-foreground">{row}</span>
                     </th>
                     {Array.from({length: size}, (_, i) => i + 1).map(col => 
