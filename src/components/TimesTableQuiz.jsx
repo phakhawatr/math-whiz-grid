@@ -472,44 +472,85 @@ const TimesTableQuiz = () => {
           </div>
           
           <div className="flex flex-wrap items-center justify-between gap-6 mt-6">
-            {/* Action Buttons */}
-            <div className="flex gap-4">
+            {/* Action Buttons - Material Design with Colors */}
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={handleNewSet}
-                className="px-8 py-3 bg-gray-100 text-black font-semibold rounded-xl hover:bg-gray-200 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="
+                  flex items-center gap-2 px-6 py-3 
+                  bg-gradient-to-r from-orange-500 to-orange-600 
+                  text-white font-semibold rounded-xl 
+                  hover:from-orange-600 hover:to-orange-700 
+                  hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30
+                  active:scale-95
+                  transition-all duration-200 
+                  shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2
+                "
               >
-                🎲 สุ่มชุดใหม่
+                🎲 <span>สุ่มชุดใหม่</span>
               </button>
               
               <button
                 onClick={handleCheck}
                 disabled={!startedAt || checked || showAnswers}
-                className="px-8 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 shadow-md hover:shadow-lg"
+                className="
+                  flex items-center gap-2 px-6 py-3 
+                  bg-gradient-to-r from-green-500 to-green-600 
+                  text-white font-semibold rounded-xl 
+                  hover:from-green-600 hover:to-green-700 
+                  hover:scale-105 hover:shadow-lg hover:shadow-green-500/30
+                  disabled:from-gray-400 disabled:to-gray-500 
+                  disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
+                  active:scale-95
+                  transition-all duration-200 
+                  shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2
+                "
               >
-                ✅ ตรวจคำตอบ
+                ✅ <span>ตรวจคำตอบ</span>
               </button>
               
               <button
                 onClick={handleShowAnswers}
                 disabled={showAnswers}
-                className="px-8 py-3 bg-gray-100 text-black font-semibold rounded-xl hover:bg-gray-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 shadow-md hover:shadow-lg"
+                className="
+                  flex items-center gap-2 px-6 py-3 
+                  bg-gradient-to-r from-purple-500 to-purple-600 
+                  text-white font-semibold rounded-xl 
+                  hover:from-purple-600 hover:to-purple-700 
+                  hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30
+                  disabled:from-gray-400 disabled:to-gray-500 
+                  disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
+                  active:scale-95
+                  transition-all duration-200 
+                  shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2
+                "
               >
-                👁️ เฉลยทั้งหมด
+                👁️ <span>เฉลยทั้งหมด</span>
               </button>
             </div>
             
-            {/* Symmetric Option */}
-            <label className="flex items-center gap-3 cursor-pointer bg-gray-50 px-4 py-2 rounded-xl">
-              <input
-                type="checkbox"
-                checked={dedupeSymmetric}
-                onChange={(e) => setDedupeSymmetric(e.target.checked)}
-                className="w-5 h-5 text-blue-500 bg-white border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500/50"
-              />
-              <span className="text-sm font-medium text-black">
-                ซ่อนค่าซ้ำแบบกลับด้าน (a×b = b×a)
-              </span>
-            </label>
+            {/* Symmetric Option - Material Design Card */}
+            <div className="
+              bg-gradient-to-r from-blue-50 to-indigo-50 
+              border border-blue-200 rounded-xl px-4 py-3
+              shadow-sm hover:shadow-md transition-shadow duration-200
+            ">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={dedupeSymmetric}
+                  onChange={(e) => setDedupeSymmetric(e.target.checked)}
+                  className="
+                    w-5 h-5 text-blue-600 bg-white border-2 border-blue-300 
+                    rounded-md focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2
+                    hover:border-blue-400 transition-colors duration-200
+                  "
+                />
+                <span className="text-sm font-medium text-blue-800 select-none">
+                  ซ่อนค่าซ้ำแบบกลับด้าน (a×b = b×a)
+                </span>
+              </label>
+            </div>
           </div>
         </div>
         
