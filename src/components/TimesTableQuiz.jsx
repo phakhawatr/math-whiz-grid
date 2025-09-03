@@ -433,21 +433,28 @@ const TimesTableQuiz = () => {
         {/* Controls */}
         <div className="bg-card rounded-2xl shadow-lg p-6 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-6">
-            {/* จำนวนช่อง */}
-            <div className="flex items-center gap-3">
-              <span className="text-lg font-semibold text-black">จำนวนช่อง ?:</span>
-              <div className="flex gap-3">
+            {/* จำนวนช่อง - Material Design */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <span className="text-lg font-medium text-gray-800 whitespace-nowrap">จำนวนช่อง ?:</span>
+              <div className="flex flex-wrap gap-2">
                 {HOLE_OPTIONS.map(count => (
                   <button
                     key={count}
                     onClick={() => setHoleCount(count)}
-                    className={`px-6 py-3 rounded-xl font-semibold text-black transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 ${
-                      holeCount === count
-                        ? 'bg-blue-500 text-white shadow-lg scale-105'
-                        : 'bg-gray-100 hover:bg-gray-200'
-                    }`}
+                    className={`
+                      relative px-4 py-2 min-w-[60px] rounded-full font-medium text-sm
+                      transition-all duration-300 ease-out
+                      focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2
+                      ${holeCount === count
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-500/40'
+                        : 'bg-white text-gray-700 border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 hover:border-gray-300 hover:scale-102'
+                      }
+                      active:scale-95 transform
+                    `}
                   >
-                    {count}
+                    <span className="relative z-10">{count}</span>
+                    {/* Ripple effect overlay */}
+                    <div className="absolute inset-0 rounded-full bg-current opacity-0 group-active:opacity-20 transition-opacity duration-150"></div>
                   </button>
                 ))}
               </div>

@@ -133,3 +133,8 @@
 .input-number-blue {
   color: hsl(210 100% 50%) !important;
 }
+
+/* Material Design utility classes */
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
