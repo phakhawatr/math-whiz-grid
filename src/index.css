@@ -119,3 +119,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom animations and styles */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.placeholder-blink::placeholder {
+  animation: blink 1.5s infinite;
+}
+
+.input-number-blue {
+  color: hsl(210 100% 50%) !important;
+}

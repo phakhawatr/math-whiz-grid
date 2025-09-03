@@ -163,6 +163,7 @@ const TimesTableQuiz = () => {
     
     setAnswers(newAnswers);
     setShowAnswers(true);
+    setChecked(true); // Set checked to true to trigger red coloring
     
     if (startedAt && !finishedAt) {
       setFinishedAt(Date.now());
@@ -343,12 +344,25 @@ const TimesTableQuiz = () => {
       const correctAnswer = value;
       const isCorrect = parseInt(userAnswer) === correctAnswer;
       
-      let inputClass = 'w-full h-12 text-center text-xl font-bold bg-table-hole text-black border-2 border-red-300 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none shadow-inner';
+      let inputClass = 'w-full h-12 text-center text-xl font-bold bg-table-hole border-2 border-red-300 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none shadow-inner';
       
-      if (checked) {
-        inputClass += isCorrect 
-          ? ' border-success bg-success/20 text-success-foreground shadow-lg' 
-          : ' border-error bg-error/20 text-error-foreground shadow-lg';
+      // Add blinking placeholder when empty
+      if (!userAnswer) {
+        inputClass += ' placeholder-blink text-gray-400';
+      } else {
+        inputClass += ' input-number-blue';
+      }
+      
+      if (checked || showAnswers) {
+        if (showAnswers) {
+          // เฉลยทั้งหมด - แสดงสีแดง
+          inputClass += ' border-error bg-error/20 text-error-foreground shadow-lg';
+        } else {
+          // ตรวจคำตอบ - เขียวถูก แดงผิด
+          inputClass += isCorrect 
+            ? ' border-success bg-success/20 text-success-foreground shadow-lg' 
+            : ' border-error bg-error/20 text-error-foreground shadow-lg';
+        }
       }
       
       return (
@@ -415,16 +429,16 @@ const TimesTableQuiz = () => {
           <div className="flex flex-wrap items-center justify-between gap-6">
             {/* จำนวนช่อง */}
             <div className="flex items-center gap-3">
-              <span className="text-lg font-semibold text-card-foreground">จำนวนช่อง ?:</span>
-              <div className="flex gap-2 bg-background rounded-xl p-2 shadow-inner">
+              <span className="text-lg font-semibold text-black">จำนวนช่อง ?:</span>
+              <div className="flex gap-3">
                 {HOLE_OPTIONS.map(count => (
                   <button
                     key={count}
                     onClick={() => setHoleCount(count)}
-                    className={`px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 ${
+                    className={`px-6 py-3 rounded-xl font-semibold text-black transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 ${
                       holeCount === count
-                        ? 'bg-primary text-primary-foreground shadow-lg transform scale-105'
-                        : 'text-foreground hover:bg-primary/10 hover:scale-105 shadow-sm'
+                        ? 'bg-blue-500 text-white shadow-lg scale-105'
+                        : 'bg-gray-100 hover:bg-gray-200'
                     }`}
                   >
                     {count}
@@ -449,7 +463,7 @@ const TimesTableQuiz = () => {
             <div className="flex gap-4">
               <button
                 onClick={handleNewSet}
-                className="px-8 py-3 bg-gradient-to-r from-secondary to-secondary/90 text-secondary-foreground font-semibold rounded-xl hover:from-secondary/90 hover:to-secondary hover:scale-105 transition-all duration-200 shadow-lg"
+                className="px-8 py-3 bg-gray-100 text-black font-semibold rounded-xl hover:bg-gray-200 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 🎲 สุ่มชุดใหม่
               </button>
@@ -457,28 +471,28 @@ const TimesTableQuiz = () => {
               <button
                 onClick={handleCheck}
                 disabled={!startedAt || checked}
-                className="px-8 py-3 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground font-semibold rounded-xl hover:from-primary/90 hover:to-primary hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 shadow-lg"
+                className="px-8 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 ✅ ตรวจคำตอบ
               </button>
               
               <button
                 onClick={handleShowAnswers}
-                className="px-8 py-3 bg-gradient-to-r from-card-foreground/80 to-card-foreground text-card font-semibold rounded-xl hover:from-card-foreground hover:to-card-foreground/90 hover:scale-105 transition-all duration-200 shadow-lg"
+                className="px-8 py-3 bg-gray-100 text-black font-semibold rounded-xl hover:bg-gray-200 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                💡 เฉลยทั้งหมด
+                👁️ เฉลยทั้งหมด
               </button>
             </div>
             
             {/* Symmetric Option */}
-            <label className="flex items-center gap-3 cursor-pointer bg-background/50 px-4 py-2 rounded-xl">
+            <label className="flex items-center gap-3 cursor-pointer bg-gray-50 px-4 py-2 rounded-xl">
               <input
                 type="checkbox"
                 checked={dedupeSymmetric}
                 onChange={(e) => setDedupeSymmetric(e.target.checked)}
-                className="w-5 h-5 text-primary bg-background border-2 border-primary/20 rounded-md focus:ring-2 focus:ring-primary/50"
+                className="w-5 h-5 text-blue-500 bg-white border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500/50"
               />
-              <span className="text-sm font-medium text-card-foreground">
+              <span className="text-sm font-medium text-black">
                 ซ่อนค่าซ้ำแบบกลับด้าน (a×b = b×a)
               </span>
             </label>
