@@ -132,24 +132,6 @@ const TimesTableQuiz = () => {
     setChecked(true);
     setShowAnswers(false); // Reset show answers state
     
-    // คำนวณคะแนน
-    const table = buildTimesTable(size);
-    let correct = 0;
-    let total = 0;
-    
-    holes.forEach(holeId => {
-      const [, r, , c] = holeId.match(/r(\d+)c(\d+)/);
-      const row = parseInt(r) - 1;
-      const col = parseInt(c) - 1;
-      const userAnswer = parseInt(answers[holeId] || '');
-      const correctAnswer = table[row][col];
-      
-      total++;
-      if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
-        correct++;
-      }
-    });
-    
     setTimeout(() => setShowModal(true), 500);
   };
   
@@ -302,19 +284,18 @@ const TimesTableQuiz = () => {
    * คำนวณคะแนนและข้อความชมเชย
    */
   const getScoreData = () => {
-    const table = buildTimesTable(size);
     let correct = 0;
     let total = 0;
     
     holes.forEach(holeId => {
-      const [, r, , c] = holeId.match(/r(\d+)c(\d+)/);
-      const row = parseInt(r) - 1;
-      const col = parseInt(c) - 1;
+      const [, r, c] = holeId.match(/r(\d+)c(\d+)/); // ใช้ตรรกะเดียวกันกับ handleShowAnswers
+      const row = parseInt(r);
+      const col = parseInt(c);
       const userAnswer = parseInt(answers[holeId] || '');
-      const correctAnswer = table[row][col];
+      const correctAnswer = row * col; // คำนวณตามหลักคณิตศาสตร์
       
       total++;
-      if (userAnswer === correctAnswer) {
+      if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
         correct++;
       }
     });
