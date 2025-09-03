@@ -573,7 +573,7 @@ const TimesTableQuiz = () => {
 export default TimesTableQuiz;
 
 /*
-=== การติดตั้ง (Setup Instructions) ===
+การติดตั้งและใช้งาน (Setup Instructions)
 
 1. สร้างโปรเจ็กต์ Vite + React:
    npm create vite@latest times-table-quiz -- --template react
@@ -583,51 +583,9 @@ export default TimesTableQuiz;
    npm install -D tailwindcss postcss autoprefixer
    npx tailwindcss init -p
 
-3. ตั้งค่า tailwind.config.js:
-   module.exports = {
-     content: [
-       "./index.html",
-       "./src/**/*.{js,ts,jsx,tsx}",
-     ],
-     theme: {
-       extend: {},
-     },
-     plugins: [],
-   }
+3. ตั้งค่า tailwind.config.js
+4. เพิ่ม Tailwind directives ใน src/index.css
+5. รันโปรเจ็กต์: npm run dev
 
-4. เพิ่ม Tailwind directives ใน src/index.css:
-   @tailwind base;
-   @tailwind components;
-   @tailwind utilities;
-
-5. รันโปรเจ็กต์:
-   npm run dev
-
-=== ตัวอย่างไฟล์ index.html ===
-<!DOCTYPE html>
-<html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ตารางสูตรคูณ 1-13</title>
-    <meta name="description" content="แบบฝึกหัดท่องสูตรคูณสำหรับเด็ก ฝึกคณิตศาสตร์แบบสนุก" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
-
-=== ตัวอย่างไฟล์ src/main.jsx ===
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import TimesTableQuiz from './components/TimesTableQuiz'
-import './index.css'
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <TimesTableQuiz />
-  </React.StrictMode>,
-)
+สำหรับรายละเอียดเพิ่มเติม กรุณาดูเอกสารการติดตั้ง Vite + React + Tailwind CSS
 */
