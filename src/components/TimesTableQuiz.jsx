@@ -157,19 +157,23 @@ const TimesTableQuiz = () => {
    * แสดงเฉลยทั้งหมด
    */
   const handleShowAnswers = () => {
-    const table = buildTimesTable(size);
+    console.log('Show answers button clicked!'); // Debug log
     const newAnswers = { ...answers };
     
+    // คำนวณคำตอบที่ถูกต้องตามหลักคณิตศาสตร์ (row × col)
     holes.forEach(holeId => {
       const [, r, , c] = holeId.match(/r(\d+)c(\d+)/);
-      const row = parseInt(r) - 1;
-      const col = parseInt(c) - 1;
-      newAnswers[holeId] = table[row][col].toString();
+      const row = parseInt(r);
+      const col = parseInt(c);
+      const correctAnswer = row * col; // คำนวณตามหลักคณิตศาสตร์
+      newAnswers[holeId] = correctAnswer.toString();
+      console.log(`Hole ${holeId}: ${row} × ${col} = ${correctAnswer}`); // Debug log
     });
     
+    console.log('Setting answers:', newAnswers); // Debug log
     setAnswers(newAnswers);
     setShowAnswers(true);
-    setChecked(false); // Don't show as checked, just show answers
+    setChecked(false);
     
     if (startedAt && !finishedAt) {
       setFinishedAt(Date.now());
