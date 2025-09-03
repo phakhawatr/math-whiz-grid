@@ -2,57 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Educational Math App Design System - Playful & Engaging for Kids */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base colors - warm and friendly for kids */
+    --background: 45 100% 98%;
+    --foreground: 220 13% 18%;
 
+    /* Educational theme colors */
+    --primary: 30 100% 50%;        /* Bright orange for headers */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 45 100% 65%;      /* Warm yellow for accents */
+    --secondary-foreground: 220 13% 18%;
+    
+    /* Interactive colors */
+    --success: 120 100% 40%;       /* Green for correct answers */
+    --success-foreground: 0 0% 100%;
+    
+    --error: 0 100% 60%;           /* Red for incorrect answers */
+    --error-foreground: 0 0% 100%;
+    
+    --perfect-square: 0 100% 50%;  /* Red for diagonal numbers */
+    --perfect-square-foreground: 0 0% 100%;
+    
+    /* UI element colors */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --card-foreground: 220 13% 18%;
+    
+    --input: 210 40% 98%;
+    --input-foreground: 220 13% 18%;
+    --input-focus: 30 100% 50%;
+    
+    --border: 220 13% 91%;
+    --ring: 30 100% 50%;
+    
+    /* Table colors */
+    --table-header: 35 100% 75%;   /* Orange gradient for headers */
+    --table-header-alt: 45 100% 85%; /* Yellow gradient for headers */
+    --table-cell: 210 40% 98%;     /* Light background for cells */
+    --table-cell-alt: 45 100% 96%; /* Alternating cell color */
+    --table-hole: 220 13% 95%;     /* Slightly darker for input cells */
+    
+    /* Interactive states */
+    --hover: 30 100% 55%;
+    --active: 30 100% 45%;
+    
+    --radius: 0.75rem;
+    
+    /* Animations */
+    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
 
   .dark {
