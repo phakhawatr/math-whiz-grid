@@ -157,20 +157,17 @@ const TimesTableQuiz = () => {
    * แสดงเฉลยทั้งหมด
    */
   const handleShowAnswers = () => {
-    console.log('Show answers button clicked!'); // Debug log
     const newAnswers = { ...answers };
     
     // คำนวณคำตอบที่ถูกต้องตามหลักคณิตศาสตร์ (row × col)
     holes.forEach(holeId => {
-      const [, r, , c] = holeId.match(/r(\d+)c(\d+)/);
+      const [, r, c] = holeId.match(/r(\d+)c(\d+)/); // แก้ไข destructuring
       const row = parseInt(r);
       const col = parseInt(c);
-      const correctAnswer = row * col; // คำนวณตามหลักคณิตศาสตร์
+      const correctAnswer = row * col;
       newAnswers[holeId] = correctAnswer.toString();
-      console.log(`Hole ${holeId}: ${row} × ${col} = ${correctAnswer}`); // Debug log
     });
     
-    console.log('Setting answers:', newAnswers); // Debug log
     setAnswers(newAnswers);
     setShowAnswers(true);
     setChecked(false);
