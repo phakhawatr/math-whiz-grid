@@ -121,10 +121,16 @@ const TimesTableQuiz = () => {
    * ตรวจคำตอบ
    */
   const handleCheck = () => {
+    // ตรวจสอบว่ามีการเริ่มทำข้อสอบและมีคำตอบบางข้อ
     if (!startedAt) return;
+    
+    // ตรวจสอบว่ามีคำตอบอย่างน้อย 1 ข้อ
+    const hasAnswers = Object.values(answers).some(answer => answer && answer.trim() !== '');
+    if (!hasAnswers) return;
     
     setFinishedAt(Date.now());
     setChecked(true);
+    setShowAnswers(false); // Reset show answers state
     
     // คำนวณคะแนน
     const table = buildTimesTable(size);
@@ -139,7 +145,7 @@ const TimesTableQuiz = () => {
       const correctAnswer = table[row][col];
       
       total++;
-      if (userAnswer === correctAnswer) {
+      if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
         correct++;
       }
     });
@@ -163,7 +169,7 @@ const TimesTableQuiz = () => {
     
     setAnswers(newAnswers);
     setShowAnswers(true);
-    setChecked(true); // Set checked to true to trigger red coloring
+    setChecked(false); // Don't show as checked, just show answers
     
     if (startedAt && !finishedAt) {
       setFinishedAt(Date.now());
@@ -342,27 +348,26 @@ const TimesTableQuiz = () => {
       // ช่องที่ให้กรอกคำตอบ - ใช้สีแดงอ่อน
       const userAnswer = answers[holeId] || '';
       const correctAnswer = value;
-      const isCorrect = parseInt(userAnswer) === correctAnswer;
+      const isCorrect = !isNaN(parseInt(userAnswer)) && parseInt(userAnswer) === correctAnswer;
       
       let inputClass = 'w-full h-12 text-center text-xl font-bold bg-table-hole border-2 border-red-300 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none shadow-inner';
       
-      // Add blinking placeholder when empty
+      // Add blinking placeholder when empty, blue text when filled
       if (!userAnswer) {
         inputClass += ' placeholder-blink text-gray-400';
       } else {
         inputClass += ' input-number-blue';
       }
       
-      if (checked || showAnswers) {
-        if (showAnswers) {
-          // เฉลยทั้งหมด - แสดงสีแดง
-          inputClass += ' border-error bg-error/20 text-error-foreground shadow-lg';
-        } else {
-          // ตรวจคำตอบ - เขียวถูก แดงผิด
-          inputClass += isCorrect 
-            ? ' border-success bg-success/20 text-success-foreground shadow-lg' 
-            : ' border-error bg-error/20 text-error-foreground shadow-lg';
-        }
+      // Handle different states: checking answers vs showing all answers
+      if (checked && !showAnswers) {
+        // ตรวจคำตอบ - เขียวถูก แดงผิด
+        inputClass += isCorrect 
+          ? ' !border-green-500 !bg-green-100 !text-green-800 shadow-lg' 
+          : ' !border-red-500 !bg-red-100 !text-red-800 shadow-lg';
+      } else if (showAnswers) {
+        // เฉลยทั้งหมด - แสดงสีแดงทั้งหมด
+        inputClass += ' !border-red-500 !bg-red-100 !text-red-800 shadow-lg';
       }
       
       return (
@@ -470,7 +475,7 @@ const TimesTableQuiz = () => {
               
               <button
                 onClick={handleCheck}
-                disabled={!startedAt || checked}
+                disabled={!startedAt || checked || showAnswers}
                 className="px-8 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 ✅ ตรวจคำตอบ
@@ -478,7 +483,8 @@ const TimesTableQuiz = () => {
               
               <button
                 onClick={handleShowAnswers}
-                className="px-8 py-3 bg-gray-100 text-black font-semibold rounded-xl hover:bg-gray-200 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
+                disabled={showAnswers}
+                className="px-8 py-3 bg-gray-100 text-black font-semibold rounded-xl hover:bg-gray-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 👁️ เฉลยทั้งหมด
               </button>
