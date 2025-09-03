@@ -18,10 +18,6 @@ export default {
 			}
 		},
 		extend: {
-			fontFamily: {
-				'prompt': ['Prompt', 'sans-serif'],
-				'mali': ['Mali', 'cursive'],
-			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -54,20 +50,9 @@ export default {
 				},
 				'table-header': 'hsl(var(--table-header))',
 				'table-header-alt': 'hsl(var(--table-header-alt))',
+				'table-cell': 'hsl(var(--table-cell))',
+				'table-cell-alt': 'hsl(var(--table-cell-alt))',
 				'table-hole': 'hsl(var(--table-hole))',
-				'col-1': 'hsl(var(--col-1))',
-				'col-2': 'hsl(var(--col-2))',
-				'col-3': 'hsl(var(--col-3))',
-				'col-4': 'hsl(var(--col-4))',
-				'col-5': 'hsl(var(--col-5))',
-				'col-6': 'hsl(var(--col-6))',
-				'col-7': 'hsl(var(--col-7))',
-				'col-8': 'hsl(var(--col-8))',
-				'col-9': 'hsl(var(--col-9))',
-				'col-10': 'hsl(var(--col-10))',
-				'col-11': 'hsl(var(--col-11))',
-				'col-12': 'hsl(var(--col-12))',
-				'col-13': 'hsl(var(--col-13))',
 				hover: 'hsl(var(--hover))',
 				active: 'hsl(var(--active))',
 				sidebar: {
