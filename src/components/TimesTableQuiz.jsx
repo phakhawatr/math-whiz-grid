@@ -364,9 +364,7 @@ const TimesTableQuiz = () => {
       {/* Header */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            ตารางสูตรคูณ 1–13
-          </h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2 my-[10px]">ตารางเทพสูตรคูณ 1–13</h1>
           <p className="text-lg text-foreground/70">
             ฝึกสูตรคูณสำหรับเด็กแบบสนุก ๆ
           </p>
@@ -374,10 +372,10 @@ const TimesTableQuiz = () => {
         
         {/* Controls */}
         <div className="bg-card rounded-2xl shadow-lg p-6 mb-6 my-[10px] py-[24px]">
-          <div className="flex flex-wrap items-center justify-between gap-6 my-[20px]">
+          <div className="flex flex-wrap items-center justify-between gap-6 my-[25px]">
             {/* จำนวนช่อง - Material Design */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <span className="text-lg font-medium text-gray-800 whitespace-nowrap px-[20px]">จำนวนช่อง ?:</span>
+              <span className="text-lg font-medium text-gray-800 whitespace-nowrap px-[25px]">จำนวนช่อง ?:</span>
               <div className="flex flex-wrap gap-2">
                 {HOLE_OPTIONS.map(count => <button key={count} onClick={() => setHoleCount(count)} className={`
                       relative px-4 py-2 min-w-[60px] rounded-full font-medium text-sm
@@ -407,15 +405,15 @@ const TimesTableQuiz = () => {
           <div className="flex flex-wrap items-center justify-between gap-6 mt-6">
             {/* Action Buttons - Material Design with Colors */}
             <div className="flex flex-wrap gap-3">
-              <button onClick={handleNewSet} className="flex items-center gap-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 px-[50px] text-sky-600 bg-sky-200 hover:bg-sky-100">
+              <button onClick={handleNewSet} className="flex items-center gap-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 text-sky-600 bg-sky-200 hover:bg-sky-100 px-[60px]">
                 🎲 <span>สุ่มชุดใหม่</span>
               </button>
               
-              <button onClick={handleCheck} disabled={!startedAt || checked || showAnswers} className="flex items-center gap-2 py-3 bg-gradient-to-r from-green-500 to-green-600 font-semibold rounded-xl hover:from-green-600 hover:to-green-700 hover:scale-105 hover:shadow-lg hover:shadow-green-500/30 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2 px-[50px] text-orange-700 bg-orange-300 hover:bg-orange-200">
+              <button onClick={handleCheck} disabled={!startedAt || checked || showAnswers} className="flex items-center gap-2 py-3 bg-gradient-to-r from-green-500 to-green-600 font-semibold rounded-xl hover:from-green-600 hover:to-green-700 hover:scale-105 hover:shadow-lg hover:shadow-green-500/30 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2 text-orange-700 bg-orange-300 hover:bg-orange-200 px-[60px]">
                 ✅ <span>ตรวจคำตอบ</span>
               </button>
               
-              <button onClick={handleShowAnswers} disabled={showAnswers} className="flex items-center gap-2 py-3 bg-gradient-to-r from-purple-500 to-purple-600 font-semibold rounded-xl hover:from-purple-600 hover:to-purple-700 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 mx-0 px-[50px] text-lime-300 bg-lime-200 hover:bg-lime-100">
+              <button onClick={handleShowAnswers} disabled={showAnswers} className="flex items-center gap-2 py-3 bg-gradient-to-r from-purple-500 to-purple-600 font-semibold rounded-xl hover:from-purple-600 hover:to-purple-700 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 mx-0 text-lime-300 bg-lime-200 hover:bg-lime-100 px-[60px]">
                 👁️ <span className="text-green-700">เฉลยทั้งหมด</span>
               </button>
             </div>
