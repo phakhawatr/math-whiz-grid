@@ -449,7 +449,7 @@ const TimesTableQuiz = () => {
                   </th>
                   {Array.from({
                   length: size
-                }, (_, i) => i + 1).map(col => <th key={col} className="sticky top-0 z-10 w-16 h-12 bg-table-header border border-gray-300 shadow-md bg-violet-300">
+                }, (_, i) => i + 1).map(col => <th key={col} className="sticky top-0 z-10 w-16 h-12 bg-violet-300 border border-gray-300 shadow-md">
                       <span className="text-xl font-bold text-foreground">{col}</span>
                     </th>)}
                 </tr>
