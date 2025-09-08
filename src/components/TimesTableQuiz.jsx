@@ -11,7 +11,7 @@ const TimesTableQuiz = () => {
   // ค่าคงที่
   const TABLE_SIZE = 13;
   const HOLE_OPTIONS = [40, 50, 60, 70, 80];
-  
+
   // State หลัก
   const [size] = useState(TABLE_SIZE);
   const [holeCount, setHoleCount] = useState(40);
@@ -25,14 +25,14 @@ const TimesTableQuiz = () => {
   const [dedupeSymmetric, setDedupeSymmetric] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
-  
+
   // Refs
   const inputRefs = useRef({});
-  
+
   /**
    * สร้างตารางสูตรคูณ size x size
    */
-  const buildTimesTable = useCallback((size) => {
+  const buildTimesTable = useCallback(size => {
     const table = [];
     for (let r = 1; r <= size; r++) {
       const row = [];
@@ -43,14 +43,16 @@ const TimesTableQuiz = () => {
     }
     return table;
   }, []);
-  
+
   /**
    * สุ่มตำแหน่งช่องว่าง (?) โดยไม่ซ้ำกัน
    */
   const pickRandomHoles = useCallback((count, options = {}) => {
-    const { dedupeSymmetric = false } = options;
+    const {
+      dedupeSymmetric = false
+    } = options;
     const availablePositions = [];
-    
+
     // สร้างรายการตำแหน่งที่เป็นไปได้
     for (let r = 1; r <= size; r++) {
       for (let c = 1; c <= size; c++) {
@@ -58,12 +60,12 @@ const TimesTableQuiz = () => {
         availablePositions.push(`r${r}c${c}`);
       }
     }
-    
+
     // สุ่มเลือกตำแหน่งตามจำนวนที่ต้องการ
     const shuffled = [...availablePositions].sort(() => Math.random() - 0.5);
     return new Set(shuffled.slice(0, Math.min(count, shuffled.length)));
   }, [size]);
-  
+
   /**
    * เริ่มจับเวลาเมื่อพิมพ์คำตอบครั้งแรก
    */
@@ -72,7 +74,7 @@ const TimesTableQuiz = () => {
       setStartedAt(Date.now());
     }
   }, [startedAt, checked]);
-  
+
   /**
    * อัพเดตเวลาที่ผ่านไป
    */
@@ -85,27 +87,29 @@ const TimesTableQuiz = () => {
     }
     return () => clearInterval(interval);
   }, [startedAt, finishedAt, checked]);
-  
+
   /**
    * แปลงเวลาเป็นรูปแบบ mm:ss
    */
-  const formatTime = (ms) => {
+  const formatTime = ms => {
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
-  
+
   /**
    * ตรวจสอบว่าเป็นกำลังสอง (แนวทแยง)
    */
   const isPerfectSquare = (row, col) => row === col;
-  
+
   /**
    * สุ่มชุดใหม่
    */
   const handleNewSet = () => {
-    const newHoles = pickRandomHoles(holeCount, { dedupeSymmetric });
+    const newHoles = pickRandomHoles(holeCount, {
+      dedupeSymmetric
+    });
     setHoles(newHoles);
     setAnswers({});
     setStartedAt(null);
@@ -116,32 +120,33 @@ const TimesTableQuiz = () => {
     setShowModal(false);
     setFocusedInput(null);
   };
-  
+
   /**
    * ตรวจคำตอบ
    */
   const handleCheck = () => {
     // ตรวจสอบว่ามีการเริ่มทำข้อสอบและมีคำตอบบางข้อ
     if (!startedAt) return;
-    
+
     // ตรวจสอบว่ามีคำตอบอย่างน้อย 1 ข้อ
     const hasAnswers = Object.values(answers).some(answer => answer && answer.trim() !== '');
     if (!hasAnswers) return;
-    
     setFinishedAt(Date.now());
     setChecked(true);
     setShowAnswers(false); // Reset show answers state
-    
+
     // แสดง modal หลังจากแสดงผลลัพธ์แล้ว
     setTimeout(() => setShowModal(true), 1000);
   };
-  
+
   /**
    * แสดงเฉลยทั้งหมด
    */
   const handleShowAnswers = () => {
-    const newAnswers = { ...answers };
-    
+    const newAnswers = {
+      ...answers
+    };
+
     // คำนวณคำตอบที่ถูกต้องตามหลักคณิตศาสตร์ (row × col)
     holes.forEach(holeId => {
       const [, r, c] = holeId.match(/r(\d+)c(\d+)/); // แก้ไข destructuring
@@ -150,43 +155,38 @@ const TimesTableQuiz = () => {
       const correctAnswer = row * col;
       newAnswers[holeId] = correctAnswer.toString();
     });
-    
     setAnswers(newAnswers);
     setShowAnswers(true);
     setChecked(false);
-    
     if (startedAt && !finishedAt) {
       setFinishedAt(Date.now());
     }
   };
-  
+
   /**
    * จัดการการพิมพ์ในช่อง input
    */
   const handleInputChange = (holeId, value) => {
     // รับเฉพาะตัวเลข
     const numericValue = value.replace(/\D/g, '').slice(0, 3);
-    
     setAnswers(prev => ({
       ...prev,
       [holeId]: numericValue
     }));
-    
     startTimer();
-    
+
     // Auto-move เมื่อพิมพ์เต็มหรือกด →
     if (numericValue.length >= 3) {
       moveToNextInput(holeId);
     }
   };
-  
+
   /**
    * จัดการ key events
    */
   const handleKeyDown = (e, holeId) => {
     const holeArray = Array.from(holes);
     const currentIndex = holeArray.indexOf(holeId);
-    
     switch (e.key) {
       case 'ArrowRight':
       case 'Tab':
@@ -224,11 +224,11 @@ const TimesTableQuiz = () => {
         break;
     }
   };
-  
+
   /**
    * เลื่อนไปช่องถัดไป
    */
-  const moveToNextInput = (currentHoleId) => {
+  const moveToNextInput = currentHoleId => {
     const holeArray = Array.from(holes);
     const currentIndex = holeArray.indexOf(currentHoleId);
     if (currentIndex < holeArray.length - 1) {
@@ -236,11 +236,11 @@ const TimesTableQuiz = () => {
       inputRefs.current[nextHoleId]?.focus();
     }
   };
-  
+
   /**
    * เลื่อนไปช่องก่อนหน้า
    */
-  const moveToPrevInput = (currentHoleId) => {
+  const moveToPrevInput = currentHoleId => {
     const holeArray = Array.from(holes);
     const currentIndex = holeArray.indexOf(currentHoleId);
     if (currentIndex > 0) {
@@ -248,15 +248,14 @@ const TimesTableQuiz = () => {
       inputRefs.current[prevHoleId]?.focus();
     }
   };
-  
+
   /**
    * เลื่อนไปช่องด้านบน
    */
-  const moveToInputAbove = (currentHoleId) => {
-    const [, r, , c] = currentHoleId.match(/r(\d+)c(\d+)/);
+  const moveToInputAbove = currentHoleId => {
+    const [, r,, c] = currentHoleId.match(/r(\d+)c(\d+)/);
     const row = parseInt(r);
     const col = parseInt(c);
-    
     if (row > 1) {
       const aboveHoleId = `r${row - 1}c${col}`;
       if (holes.has(aboveHoleId)) {
@@ -264,15 +263,14 @@ const TimesTableQuiz = () => {
       }
     }
   };
-  
+
   /**
    * เลื่อนไปช่องด้านล่าง
    */
-  const moveToInputBelow = (currentHoleId) => {
-    const [, r, , c] = currentHoleId.match(/r(\d+)c(\d+)/);
+  const moveToInputBelow = currentHoleId => {
+    const [, r,, c] = currentHoleId.match(/r(\d+)c(\d+)/);
     const row = parseInt(r);
     const col = parseInt(c);
-    
     if (row < size) {
       const belowHoleId = `r${row + 1}c${col}`;
       if (holes.has(belowHoleId)) {
@@ -280,39 +278,36 @@ const TimesTableQuiz = () => {
       }
     }
   };
-  
+
   /**
    * คำนวณคะแนนและข้อความชมเชย
    */
   const getScoreData = () => {
     let correct = 0;
     let total = 0;
-    
     holes.forEach(holeId => {
       const [, r, c] = holeId.match(/r(\d+)c(\d+)/); // ใช้ตรรกะเดียวกันกับ handleShowAnswers
       const row = parseInt(r);
       const col = parseInt(c);
       const userAnswer = parseInt(answers[holeId] || '');
       const correctAnswer = row * col; // คำนวณตามหลักคณิตศาสตร์
-      
+
       total++;
       if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
         correct++;
       }
     });
-    
-    const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+    const percentage = total > 0 ? Math.round(correct / total * 100) : 0;
     let message = '';
-    
-    if (percentage >= 95) message = '🎉 เยี่ยมมาก! คุณเก่งมากเลยนะ!';
-    else if (percentage >= 85) message = '👍 เก่งมาก! อีกนิดเดียวก็เพอร์เฟค!';
-    else if (percentage >= 70) message = '😊 ดีมาก! ค่อยๆ ฝึกต่อไปนะ!';
-    else if (percentage >= 50) message = '🤔 พอใช้แล้ว ลองทบทวนสูตรคูณอีกครั้งนะ!';
-    else message = '💪 ไม่เป็นไร! ลองใหม่และฝึกเพิ่มเติมนะ!';
-    
-    return { correct, total, percentage, message };
+    if (percentage >= 95) message = '🎉 เยี่ยมมาก! คุณเก่งมากเลยนะ!';else if (percentage >= 85) message = '👍 เก่งมาก! อีกนิดเดียวก็เพอร์เฟค!';else if (percentage >= 70) message = '😊 ดีมาก! ค่อยๆ ฝึกต่อไปนะ!';else if (percentage >= 50) message = '🤔 พอใช้แล้ว ลองทบทวนสูตรคูณอีกครั้งนะ!';else message = '💪 ไม่เป็นไร! ลองใหม่และฝึกเพิ่มเติมนะ!';
+    return {
+      correct,
+      total,
+      percentage,
+      message
+    };
   };
-  
+
   /**
    * สร้าง cell ในตาราง
    */
@@ -321,86 +316,51 @@ const TimesTableQuiz = () => {
     const isHole = holes.has(holeId);
     const value = row * col;
     const isPerfectSquareCell = isPerfectSquare(row, col);
-    
+
     // สีพื้นหลังตามแถว (แม่สูตรคูณ)
-    const getRowColorClass = (row) => {
+    const getRowColorClass = row => {
       return `bg-table-row-${row}`;
     };
-    
     if (isHole) {
       // ช่องที่ให้กรอกคำตอบ - ใช้สีแดงอ่อน
       const userAnswer = answers[holeId] || '';
       const correctAnswer = value;
       const isCorrect = !isNaN(parseInt(userAnswer)) && parseInt(userAnswer) === correctAnswer;
-      
       let inputClass = 'w-full h-12 text-center text-xl font-bold bg-table-hole border-2 border-red-300 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none shadow-inner';
-      
+
       // Add blinking placeholder when empty, blue text when filled
       if (!userAnswer) {
         inputClass += ' placeholder-blink text-gray-400';
       } else {
         inputClass += ' input-number-blue';
       }
-      
+
       // Handle different states: checking answers vs showing all answers
       if (checked && !showAnswers) {
         // ตรวจคำตอบ - เขียวถูก แดงผิด
-        inputClass += isCorrect 
-          ? ' answer-correct' 
-          : ' answer-incorrect';
+        inputClass += isCorrect ? ' answer-correct' : ' answer-incorrect';
       } else if (showAnswers) {
         // เฉลยทั้งหมด - แสดงสีแดงทั้งหมด
         inputClass += ' answer-revealed';
       }
-      
-      return (
-        <td 
-          key={`${row}-${col}`}
-          className={`p-1 border border-gray-300 ${getRowColorClass(row)} w-16 h-12`}
-        >
-          <input
-            ref={el => inputRefs.current[holeId] = el}
-            type="text"
-            inputMode="numeric"
-            maxLength={3}
-            value={userAnswer}
-            placeholder="?"
-            disabled={showAnswers}
-            className={inputClass}
-            onChange={(e) => handleInputChange(holeId, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(e, holeId)}
-            onFocus={() => setFocusedInput(holeId)}
-            onBlur={() => setFocusedInput(null)}
-            aria-label={`ช่อง ${row} คูณ ${col}`}
-          />
-        </td>
-      );
+      return <td key={`${row}-${col}`} className={`p-1 border border-gray-300 ${getRowColorClass(row)} w-16 h-12`}>
+          <input ref={el => inputRefs.current[holeId] = el} type="text" inputMode="numeric" maxLength={3} value={userAnswer} placeholder="?" disabled={showAnswers} className={inputClass} onChange={e => handleInputChange(holeId, e.target.value)} onKeyDown={e => handleKeyDown(e, holeId)} onFocus={() => setFocusedInput(holeId)} onBlur={() => setFocusedInput(null)} aria-label={`ช่อง ${row} คูณ ${col}`} />
+        </td>;
     }
-    
+
     // ช่องที่แสดงคำตอบ
-    const cellClass = isPerfectSquareCell 
-      ? 'text-perfect-square font-bold text-xl' 
-      : 'text-foreground text-lg font-semibold';
-      
-    return (
-      <td 
-        key={`${row}-${col}`}
-        className={`p-2 w-16 h-12 border border-gray-300 text-center ${getRowColorClass(row)}`}
-      >
+    const cellClass = isPerfectSquareCell ? 'text-perfect-square font-bold text-xl' : 'text-foreground text-lg font-semibold';
+    return <td key={`${row}-${col}`} className={`p-2 w-16 h-12 border border-gray-300 text-center ${getRowColorClass(row)}`}>
         <span className={cellClass}>{value}</span>
-      </td>
-    );
+      </td>;
   };
-  
+
   // สุ่มช่องเริ่มต้นเมื่อโหลด component
   useEffect(() => {
     handleNewSet();
   }, [holeCount, dedupeSymmetric]);
-  
   const scoreData = getScoreData();
-  
-  return (
-    <div className="min-h-screen bg-background p-4">
+  return <div className="min-h-screen bg-background p-4">
       {/* Header */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-6">
@@ -413,32 +373,23 @@ const TimesTableQuiz = () => {
         </div>
         
         {/* Controls */}
-        <div className="bg-card rounded-2xl shadow-lg p-6 mb-6">
-          <div className="flex flex-wrap items-center justify-between gap-6">
+        <div className="bg-card rounded-2xl shadow-lg p-6 mb-6 my-[10px] py-[24px]">
+          <div className="flex flex-wrap items-center justify-between gap-6 my-[20px]">
             {/* จำนวนช่อง - Material Design */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <span className="text-lg font-medium text-gray-800 whitespace-nowrap">จำนวนช่อง ?:</span>
+              <span className="text-lg font-medium text-gray-800 whitespace-nowrap px-[20px]">จำนวนช่อง ?:</span>
               <div className="flex flex-wrap gap-2">
-                {HOLE_OPTIONS.map(count => (
-                  <button
-                    key={count}
-                    onClick={() => setHoleCount(count)}
-                    className={`
+                {HOLE_OPTIONS.map(count => <button key={count} onClick={() => setHoleCount(count)} className={`
                       relative px-4 py-2 min-w-[60px] rounded-full font-medium text-sm
                       transition-all duration-300 ease-out
                       focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2
-                      ${holeCount === count
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-500/40'
-                        : 'bg-white text-gray-700 border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 hover:border-gray-300 hover:scale-102'
-                      }
+                      ${holeCount === count ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-500/40' : 'bg-white text-gray-700 border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 hover:border-gray-300 hover:scale-102'}
                       active:scale-95 transform
-                    `}
-                  >
+                    `}>
                     <span className="relative z-10">{count}</span>
                     {/* Ripple effect overlay */}
                     <div className="absolute inset-0 rounded-full bg-current opacity-0 group-active:opacity-20 transition-opacity duration-150"></div>
-                  </button>
-                ))}
+                  </button>)}
               </div>
             </div>
             
@@ -456,58 +407,16 @@ const TimesTableQuiz = () => {
           <div className="flex flex-wrap items-center justify-between gap-6 mt-6">
             {/* Action Buttons - Material Design with Colors */}
             <div className="flex flex-wrap gap-3">
-              <button
-                onClick={handleNewSet}
-                className="
-                  flex items-center gap-2 px-6 py-3 
-                  bg-gradient-to-r from-orange-500 to-orange-600 
-                  text-white font-semibold rounded-xl 
-                  hover:from-orange-600 hover:to-orange-700 
-                  hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30
-                  active:scale-95
-                  transition-all duration-200 
-                  shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2
-                "
-              >
+              <button onClick={handleNewSet} className="flex items-center gap-2 py-3 bg-gradient-to-r from-orange-500 to-orange-600 font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 px-[50px] text-sky-600 bg-sky-200 hover:bg-sky-100">
                 🎲 <span>สุ่มชุดใหม่</span>
               </button>
               
-              <button
-                onClick={handleCheck}
-                disabled={!startedAt || checked || showAnswers}
-                className="
-                  flex items-center gap-2 px-6 py-3 
-                  bg-gradient-to-r from-green-500 to-green-600 
-                  text-white font-semibold rounded-xl 
-                  hover:from-green-600 hover:to-green-700 
-                  hover:scale-105 hover:shadow-lg hover:shadow-green-500/30
-                  disabled:from-gray-400 disabled:to-gray-500 
-                  disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
-                  active:scale-95
-                  transition-all duration-200 
-                  shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2
-                "
-              >
+              <button onClick={handleCheck} disabled={!startedAt || checked || showAnswers} className="flex items-center gap-2 py-3 bg-gradient-to-r from-green-500 to-green-600 font-semibold rounded-xl hover:from-green-600 hover:to-green-700 hover:scale-105 hover:shadow-lg hover:shadow-green-500/30 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2 px-[50px] text-orange-700 bg-orange-300 hover:bg-orange-200">
                 ✅ <span>ตรวจคำตอบ</span>
               </button>
               
-              <button
-                onClick={handleShowAnswers}
-                disabled={showAnswers}
-                className="
-                  flex items-center gap-2 px-6 py-3 
-                  bg-gradient-to-r from-purple-500 to-purple-600 
-                  text-white font-semibold rounded-xl 
-                  hover:from-purple-600 hover:to-purple-700 
-                  hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30
-                  disabled:from-gray-400 disabled:to-gray-500 
-                  disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
-                  active:scale-95
-                  transition-all duration-200 
-                  shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2
-                "
-              >
-                👁️ <span>เฉลยทั้งหมด</span>
+              <button onClick={handleShowAnswers} disabled={showAnswers} className="flex items-center gap-2 py-3 bg-gradient-to-r from-purple-500 to-purple-600 font-semibold rounded-xl hover:from-purple-600 hover:to-purple-700 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none active:scale-95 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 mx-0 px-[50px] text-lime-300 bg-lime-200 hover:bg-lime-100">
+                👁️ <span className="text-green-700">เฉลยทั้งหมด</span>
               </button>
             </div>
             
@@ -518,16 +427,11 @@ const TimesTableQuiz = () => {
               shadow-sm hover:shadow-md transition-shadow duration-200
             ">
               <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={dedupeSymmetric}
-                  onChange={(e) => setDedupeSymmetric(e.target.checked)}
-                  className="
+                <input type="checkbox" checked={dedupeSymmetric} onChange={e => setDedupeSymmetric(e.target.checked)} className="
                     w-5 h-5 text-blue-600 bg-white border-2 border-blue-300 
                     rounded-md focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2
                     hover:border-blue-400 transition-colors duration-200
-                  "
-                />
+                  " />
                 <span className="text-sm font-medium text-blue-800 select-none">
                   ซ่อนค่าซ้ำแบบกลับด้าน (a×b = b×a)
                 </span>
@@ -545,27 +449,24 @@ const TimesTableQuiz = () => {
                   <th className="sticky left-0 top-0 z-20 w-16 h-12 bg-table-header border border-gray-300 shadow-md">
                     <span className="text-xl font-bold text-foreground">×</span>
                   </th>
-                  {Array.from({length: size}, (_, i) => i + 1).map(col => (
-                    <th 
-                      key={col}
-                      className="sticky top-0 z-10 w-16 h-12 bg-table-header border border-gray-300 shadow-md"
-                    >
+                  {Array.from({
+                  length: size
+                }, (_, i) => i + 1).map(col => <th key={col} className="sticky top-0 z-10 w-16 h-12 bg-table-header border border-gray-300 shadow-md bg-red-200">
                       <span className="text-xl font-bold text-foreground">{col}</span>
-                    </th>
-                  ))}
+                    </th>)}
                 </tr>
               </thead>
               <tbody>
-                {Array.from({length: size}, (_, i) => i + 1).map(row => (
-                  <tr key={row}>
-                    <th className="sticky left-0 z-10 w-16 h-12 bg-table-header-alt border border-gray-300 shadow-md">
+                {Array.from({
+                length: size
+              }, (_, i) => i + 1).map(row => <tr key={row}>
+                    <th className="sticky left-0 z-10 w-16 h-12 bg-table-header-alt border border-gray-300 shadow-md bg-lime-400">
                       <span className="text-xl font-bold text-foreground">{row}</span>
                     </th>
-                    {Array.from({length: size}, (_, i) => i + 1).map(col => 
-                      renderCell(row, col)
-                    )}
-                  </tr>
-                ))}
+                    {Array.from({
+                  length: size
+                }, (_, i) => i + 1).map(col => renderCell(row, col))}
+                  </tr>)}
               </tbody>
             </table>
           </div>
@@ -583,8 +484,7 @@ const TimesTableQuiz = () => {
       </div>
       
       {/* Result Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      {showModal && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-card rounded-2xl shadow-2xl p-8 max-w-md w-full">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-card-foreground mb-4">
@@ -610,20 +510,14 @@ const TimesTableQuiz = () => {
                 </div>
               </div>
               
-              <button
-                onClick={() => setShowModal(false)}
-                className="mt-6 px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-              >
+              <button onClick={() => setShowModal(false)} className="mt-6 px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors">
                 ปิด
               </button>
             </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
+        </div>}
+    </div>;
 };
-
 export default TimesTableQuiz;
 
 /*
