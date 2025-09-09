@@ -1,43 +1,23 @@
 import React from 'react';
 import TableCell from './TableCell';
 import { TABLE_SIZE } from '../utils/constants';
-
-const TimesTable = ({ 
-  holes, 
-  answers, 
-  checked, 
-  showAnswers, 
-  inputRefs, 
-  onInputChange, 
-  onKeyDown, 
-  onFocus, 
-  onBlur 
+const TimesTable = ({
+  holes,
+  answers,
+  checked,
+  showAnswers,
+  inputRefs,
+  onInputChange,
+  onKeyDown,
+  onFocus,
+  onBlur
 }) => {
   const renderCell = (row, col) => {
     const holeId = `r${row}c${col}`;
     const isHole = holes.has(holeId);
-
-    return (
-      <TableCell
-        key={`${row}-${col}`}
-        row={row}
-        col={col}
-        isHole={isHole}
-        holes={holes}
-        answers={answers}
-        checked={checked}
-        showAnswers={showAnswers}
-        inputRefs={inputRefs}
-        onInputChange={onInputChange}
-        onKeyDown={onKeyDown}
-        onFocus={onFocus}
-        onBlur={onBlur}
-      />
-    );
+    return <TableCell key={`${row}-${col}`} row={row} col={col} isHole={isHole} holes={holes} answers={answers} checked={checked} showAnswers={showAnswers} inputRefs={inputRefs} onInputChange={onInputChange} onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlur} />;
   };
-
-  return (
-    <div className="bg-card rounded-2xl shadow-lg overflow-hidden">
+  return <div className="bg-card rounded-2xl shadow-lg overflow-hidden">
       <div className="overflow-auto">
         <table className="w-full min-w-[800px]">
           <thead>
@@ -45,32 +25,27 @@ const TimesTable = ({
               <th className="sticky left-0 top-0 z-20 w-16 h-12 bg-table-header border border-gray-300 shadow-md bg-pink-400">
                 <span className="text-xl font-bold text-foreground">×</span>
               </th>
-              {Array.from({ length: TABLE_SIZE }, (_, i) => i + 1).map(col => (
-                <th 
-                  key={col} 
-                  className="sticky top-0 z-10 w-16 h-12 bg-violet-300 border border-gray-300 shadow-md"
-                >
+              {Array.from({
+              length: TABLE_SIZE
+            }, (_, i) => i + 1).map(col => <th key={col} className="sticky top-0 z-10 w-16 h-12 border border-gray-300 shadow-md bg-cyan-400">
                   <span className="text-xl font-bold text-foreground">{col}</span>
-                </th>
-              ))}
+                </th>)}
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: TABLE_SIZE }, (_, i) => i + 1).map(row => (
-              <tr key={row}>
-                <th className="sticky left-0 z-10 w-16 h-12 bg-table-header-alt border border-gray-300 shadow-md bg-sky-300">
+            {Array.from({
+            length: TABLE_SIZE
+          }, (_, i) => i + 1).map(row => <tr key={row}>
+                <th className="sticky left-0 z-10 w-16 h-12 bg-table-header-alt border border-gray-300 shadow-md bg-yellow-400">
                   <span className="text-xl font-bold text-foreground">{row}</span>
                 </th>
-                {Array.from({ length: TABLE_SIZE }, (_, i) => i + 1).map(col => 
-                  renderCell(row, col)
-                )}
-              </tr>
-            ))}
+                {Array.from({
+              length: TABLE_SIZE
+            }, (_, i) => i + 1).map(col => renderCell(row, col))}
+              </tr>)}
           </tbody>
         </table>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default TimesTable;
