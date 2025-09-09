@@ -50,6 +50,7 @@ export default {
 				},
 				'table-header': 'hsl(var(--table-header))',
 				'table-header-alt': 'hsl(var(--table-header-alt))',
+				'table-intersection': 'hsl(var(--table-intersection))',
 				'table-cell': 'hsl(var(--table-cell))',
 				'table-cell-alt': 'hsl(var(--table-cell-alt))',
 				'table-hole': 'hsl(var(--table-hole))',
