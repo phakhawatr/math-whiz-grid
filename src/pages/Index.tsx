@@ -1,4 +1,4 @@
-import TimesTableQuiz from '../components/TimesTableQuiz';
+import TimesTableQuiz from '../components/times-table/TimesTableQuiz';
 
 const Index = () => {
   return <TimesTableQuiz />;
