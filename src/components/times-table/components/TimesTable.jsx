@@ -22,12 +22,12 @@ const TimesTable = ({
         <table className="w-full min-w-[800px]">
           <thead>
             <tr>
-              <th className="sticky left-0 top-0 z-20 w-16 h-12 border border-gray-300 shadow-md bg-pink-400">
+              <th className="sticky left-0 top-0 z-20 w-16 h-12 border border-gray-300 shadow-md bg-pink-500">
                 <span className="text-xl font-bold text-foreground">×</span>
               </th>
               {Array.from({
               length: TABLE_SIZE
-            }, (_, i) => i + 1).map(col => <th key={col} className="sticky top-0 z-10 w-16 h-12 border border-gray-300 shadow-md bg-table-header">
+            }, (_, i) => i + 1).map(col => <th key={col} className="sticky top-0 z-10 w-16 h-12 border border-gray-300 shadow-md bg-table-header bg-cyan-300">
                   <span className="text-xl font-bold text-foreground">{col}</span>
                 </th>)}
             </tr>
@@ -36,7 +36,7 @@ const TimesTable = ({
             {Array.from({
             length: TABLE_SIZE
           }, (_, i) => i + 1).map(row => <tr key={row}>
-                <th className="sticky left-0 z-10 w-16 h-12 bg-table-header-alt border border-gray-300 shadow-md">
+                <th className="sticky left-0 z-10 w-16 h-12 bg-table-header-alt border border-gray-300 shadow-md bg-indigo-300">
                   <span className="text-xl font-bold text-foreground">{row}</span>
                 </th>
                 {Array.from({
